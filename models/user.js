@@ -10,7 +10,6 @@ const UserSchema = new Schema({
   workouts: [
     {
       type: Schema.Types.ObjectId,
-      date: { type: Date, default: Date.now },
       ref: "Workout"
     }
   ]
