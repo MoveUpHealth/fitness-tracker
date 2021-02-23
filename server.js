@@ -28,12 +28,12 @@ app.get("/stats", (req, res) => {
 });
 
 app.get("/api/workouts", (req, res) => {
-  db.Workout.find({})
-    // .populate("exercises")
+  
+    db.Workout.find({})
     .then(dbWorkout => {
       res.json(dbWorkout);
-      console.log(dbWorkout)
-      console.log(dbWorkout[0].exercises)
+      // console.log(dbWorkout)
+      // console.log(dbWorkout[0].exercises)
     })
     .catch(err => {
       res.json(err);
@@ -41,8 +41,8 @@ app.get("/api/workouts", (req, res) => {
 });
 
 app.get("/api/workouts/:id", (req, res) => {
+    console.log(req.params.id)
     db.Workout.findById(req.params.id)
-      .populate("exercises")
       .then(dbWorkout => {
         res.json(dbWorkout);
       })
@@ -52,8 +52,8 @@ app.get("/api/workouts/:id", (req, res) => {
   });
 
 app.get("/api/workouts/range", (req, res) => {
+    console.log(req)
     db.Workout.find({})
-      .populate("exercises")
       .then(dbWorkout => {
         res.json(dbWorkout);
       })
@@ -62,10 +62,9 @@ app.get("/api/workouts/range", (req, res) => {
       });
   });
 
-app.post("/api/workouts", ({body}, res) => {
-    console.log(body)
-    db.Exercise.create(body)
-      .then(({_id}) => db.Workout.findByIdAndUpdate({}, { $push: { exercises: _id } }, { new: true }))
+app.post("/api/workouts", (req, res) => {
+    
+    db.Workout.create({})
       .then(dbWorkout => {
         res.json(dbWorkout);
       })
@@ -74,10 +73,10 @@ app.post("/api/workouts", ({body}, res) => {
       });
   });
 
-  app.put("/api/workouts/:id", ({body}, res) => {
-      console.log(body)
-    db.Exercise.create(body)
-      .then(({_id}) => db.Workout.findByIdAndUpdate(workout._id, { $push: { exercises: _id } }, { new: true }))
+  app.put("/api/workouts/:id", (req, res) => {
+    console.log(req.params.id)
+    console.log(req.body)
+    db.Workout.findByIdAndUpdate({ _id: req.params.id}, { $push: { exercises: req.body } }, { new: true })
       .then(dbWorkout => {
         res.json(dbWorkout);
       })
